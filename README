@@ -1,0 +1,216 @@
+# 📝 Todo API - FastAPI
+
+API de gerenciamento de tarefas (Todo) com autenticação JWT, banco de dados relacional e migrações com Alembic.
+
+---
+
+## 🚀 Tecnologias
+
+* FastAPI
+* SQLAlchemy
+* Pydantic
+* JWT (python-jose)
+* Alembic (migrations)
+* PostgreSQL
+* Uvicorn
+
+---
+
+## 📦 Funcionalidades
+
+* Cadastro de usuários
+* Login com JWT (access + refresh token)
+* CRUD de tarefas
+* Paginação (`page`, `page_size`)
+* Filtros (`completed`)
+* Migrações de banco com Alembic
+
+---
+
+## ⚙️ Pré-requisitos
+
+* Python 3.10+
+* PostgreSQL instalado
+
+---
+
+## 🔧 Instalação
+
+```bash
+git clone <seu-repo>
+cd projeto
+python -m venv venv
+source venv/bin/activate  # Linux/macOS
+venv\Scripts\activate     # Windows
+
+pip install -r requirements.txt
+```
+
+---
+
+## 🛢️ Configuração do banco
+
+Você está usando:
+
+* `psycopg2-binary` → PostgreSQL
+
+Crie um banco e configure a URL:
+
+```env
+DATABASE_URL=postgresql://usuario:senha@localhost:5432/todo_db
+```
+
+---
+
+## 🔐 Variáveis de ambiente
+
+Crie um arquivo `.env`:
+
+```env
+SECRET_KEY=sua_chave_secreta
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+```
+
+👉 `python-dotenv` carrega automaticamente essas variáveis.
+
+---
+
+## 🔄 Migrações com Alembic (IMPORTANTE)
+
+A lib **alembic** exige configuração manual.
+
+### 1. Inicializar (se ainda não fez)
+
+```bash
+alembic init alembic
+```
+
+---
+
+### 2. Configurar conexão
+
+No arquivo:
+
+```
+alembic.ini
+```
+
+ou em `env.py`, configure:
+
+```python
+sqlalchemy.url = DATABASE_URL
+```
+
+---
+
+### 3. Gerar migration
+
+```bash
+alembic revision --autogenerate -m "initial"
+```
+
+---
+
+### 4. Aplicar migration
+
+```bash
+alembic upgrade head
+```
+
+---
+
+## ▶️ Rodando o projeto
+
+```bash
+uvicorn main:app --reload
+```
+
+---
+
+## 📖 Documentação automática
+
+Disponível em:
+
+```
+http://localhost:8000/docs
+```
+
+---
+
+## 🔐 Autenticação
+
+### Login retorna:
+
+```json
+{
+  "access_token": "...",
+  "refresh_token": "..."
+}
+```
+
+Use nas requisições:
+
+```
+Authorization: Bearer <access_token>
+```
+
+---
+
+## 📚 Endpoints
+
+### Auth
+
+* `POST /register`
+* `POST /login`
+* `POST /refresh`
+
+---
+
+### Tasks
+
+* `POST /tasks`
+* `GET /tasks`
+* `GET /tasks/{id}`
+* `PUT /tasks/{id}`
+* `DELETE /tasks/{id}`
+
+---
+
+## 🔍 Paginação e filtros
+
+### Paginação:
+
+```
+GET /tasks?page=1&page_size=10
+```
+
+### Filtros:
+
+```
+GET /tasks?completed=true
+```
+
+---
+
+## ⚠️ Bibliotecas que exigem atenção
+
+### 🔹 Alembic
+
+* Precisa configurar manualmente
+* Usado para migrations
+
+---
+
+### 🔹 psycopg2-binary
+
+* Requer PostgreSQL rodando
+
+---
+
+### 🔹 python-jose
+
+* Necessário definir `SECRET_KEY`
+
+---
+

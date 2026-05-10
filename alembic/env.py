@@ -10,6 +10,18 @@ from core.config import DATABASE_URL
 from models.user import User
 from models.task import Task
 
+import os
+from dotenv import load_dotenv
+from alembic import context
+
+load_dotenv()
+
+config = context.config
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+config.set_main_option("sqlalchemy.url", DATABASE_URL)
+
 # Alembic Config
 config = context.config
 

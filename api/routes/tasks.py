@@ -62,7 +62,7 @@ async def get_task(task_id: int, db: Session = Depends(get_db), user: User = Dep
 
 
 @router.get("/", response_model=PaginatedTasksSchema)
-async def get_tasks(page: int = 1, page_size: int = 10, completed bool | None = None, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+async def get_tasks(page: int = 1, page_size: int = 10, completed: bool | None = None, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
     query = db.query(Task).filter(Task.owner_id == int(user.id))
 
     if completed is not None:
