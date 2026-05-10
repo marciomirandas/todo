@@ -1,11 +1,14 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from models.task import Task
-from schemas.task import TaskCreateSchema, TaskResponseSchema
+from schemas.task import TaskCreateSchema, TaskResponseSchema, PaginatedTasksSchema
 from api.deps import get_db, get_current_user
 from models.user import User
+import math
+
 
 router = APIRouter(prefix="/tasks", tags=["tasks"])
+
 
 @router.post("/", response_model=TaskResponseSchema)
 async def create_task(
@@ -58,9 +61,20 @@ async def get_task(task_id: int, db: Session = Depends(get_db), user: User = Dep
     return task
 
 
-@router.get("/", response_model=list[TaskResponseSchema])
-async def get_tasks(
-    db: Session = Depends(get_db),
-    user: User = Depends(get_current_user)
-):
-    return db.query(Task).filter(Task.owner_id == int(user.id)).all()
+@router.get("/", response_model=PaginatedTasksSchema)
+async def get_tasks(page: int = 1, page_size: int = 10, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    query = db.query(Task).filter(Task.owner_id == int(user.id))
+
+    total = query.count()
+
+    skip = (page - 1) * page_size
+
+    tasks = query.offset(skip).limit(page_size).all()
+
+    return {
+        "total": total,
+        "page": page,
+        "page_size": page_size,
+        "total_pages": math.ceil(total / page_size),
+        "items": tasks
+    }
