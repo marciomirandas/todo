@@ -9,7 +9,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from datetime import datetime, timedelta
 
 
-router = APIRouter(prefix="/auth", tags=["auth2"])
+router = APIRouter(prefix="/auth", tags=["auth"])
 
 
 @router.post("/register")

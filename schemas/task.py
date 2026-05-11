@@ -1,16 +1,18 @@
 from pydantic import BaseModel
+from pydantic import ConfigDict
+from typing import Optional
+
 
 class TaskCreateSchema(BaseModel):
     title: str
-    description: str | None = None
+    description: Optional[str] = None
+    completed: Optional[bool] = None
 
 
 class TaskResponseSchema(TaskCreateSchema):
     id: int
-    completed: bool
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class PaginatedTasksSchema(BaseModel):
