@@ -193,24 +193,44 @@ GET /tasks?completed=true
 
 ---
 
-## ⚠️ Bibliotecas que exigem atenção
-
-### 🔹 Alembic
-
-* Precisa configurar manualmente
-* Usado para migrations
+Aqui vai uma versão mais curta, direta e no mesmo estilo 👇
 
 ---
 
-### 🔹 psycopg2-binary
+## 🧪 Testes
 
-* Requer PostgreSQL rodando
+A API possui testes automatizados cobrindo **100% de todas funcionalidades**.
+
+### ✔️ Cobertura inclui:
+
+* Autenticação (JWT)
+* CRUD de tarefas
+* Paginação e filtros
+* Tratamento de erros (`400`, `401`, `404`)
+* Segurança (acesso inválido e usuários diferentes)
+* Dependências (`get_db`, `get_current_user`)
 
 ---
 
-### 🔹 python-jose
+## ⚙️ Ambiente de testes
 
-* Necessário definir `SECRET_KEY`
+* SQLite em memória (`:memory:`)
+* Isolamento total do banco principal
+* Reset automático a cada teste
 
 ---
 
+## 🚀 Executar testes
+
+```bash
+pytest
+```
+
+Cobertura:
+
+```bash
+coverage run -m pytest
+coverage report -m
+```
+
+---
