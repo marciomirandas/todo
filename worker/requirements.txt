@@ -1,0 +1,2 @@
+kafka-python==2.0.2
+resend==2.30.1

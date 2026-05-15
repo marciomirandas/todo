@@ -8,5 +8,4 @@ class Task(Base):
     title = Column(String)
     description = Column(String)
     completed = Column(Boolean, default=False)
-
     owner_id = Column(Integer, ForeignKey("users.id"))

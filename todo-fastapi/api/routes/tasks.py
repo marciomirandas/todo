@@ -1,10 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from sqlalchemy.orm import Session
 from models.task import Task
 from schemas.task import TaskCreateSchema, TaskResponseSchema, PaginatedTasksSchema
 from api.deps import get_db, get_current_user
 from models.user import User
 import math
+from api.kafka_producer import send_task_created_event
 
 
 router = APIRouter(prefix="/tasks", tags=["tasks"])
@@ -13,6 +14,7 @@ router = APIRouter(prefix="/tasks", tags=["tasks"])
 @router.post("/", response_model=TaskResponseSchema)
 async def create_task(
     task: TaskCreateSchema,
+    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user)
 ):
@@ -20,6 +22,9 @@ async def create_task(
     db.add(db_task)
     db.commit()
     db.refresh(db_task)
+
+    background_tasks.add_task(send_task_created_event, db_task)
+
     return db_task
 
 
@@ -35,6 +40,7 @@ async def update_task(task_id: int, task: TaskCreateSchema, db: Session = Depend
 
     db.commit()
     db.refresh(db_task)
+    
     return db_task
 
 
