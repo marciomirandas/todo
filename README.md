@@ -91,7 +91,6 @@ POSTGRES_DB=todo_db
 
 # Kafka
 KAFKA_BOOTSTRAP_SERVERS=kafka:29092
-KAFKA_TOPIC_TASK_CREATED=task-created
 ```
 
 > Os hosts devem usar os nomes dos serviços do Docker Compose (`postgres`, `kafka`), não `localhost`.
